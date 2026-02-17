@@ -1,21 +1,741 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multimidia Online</title>
-    <link rel="stylesheet" href="./css/reset-min.css">
-    <link rel="stylesheet" href="./css/googleDriveVideo.css">
+    <title>Ordem de Serviço · T.I (7 linhas)</title>
     <style>
-       
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: #e6e9ef;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 5px;
+        }
+
+        /* folha A4 */
+        .os-a4 {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+            padding: 8px 15px 5px 15px;
+            border-radius: 4px;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media print {
+            body { background: none; padding: 0; margin: 0; }
+            .os-a4 { 
+                box-shadow: none; 
+                padding: 0.1cm 0.2cm; 
+                max-width: 100%; 
+                margin: 0;
+            }
+            .no-print, .btn-adicionar-popup { display: none !important; }
+        }
+
+        /* ===== TODOS OS TEXTOS COM FONTE 12, EXCETO ASSINATURAS ===== */
+        
+        /* Cabeçalho */
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 2px;
+        }
+        
+        .logo-area {
+            flex-shrink: 0;
+            width: 70px;
+            height: 70px;
+            border: 1px solid #ccc;
+            background: #f8f8f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .logo-area img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .empresa-info {
+            flex: 1;
+            font-size: 12px;
+            line-height: 1.3;
+            color: #1e1e1e;
+            font-weight: 400;
+            border-left: 1px solid #cfcfcf;
+            padding-left: 8px;
+        }
+        
+        .empresa-info .nome-fantasia {
+            font-weight: 700;
+            font-size: 12px;
+            color: #0b2b4a;
+        }
+
+        /* Número da OS */
+        .os-number-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin: 2px 0 3px 0;
+            gap: 5px;
+        }
+        
+        .os-number-row label {
+            font-weight: 600;
+            font-size: 12px;
+            color: #0b2b4a;
+        }
+        
+        .os-number-row input {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border: 1px solid #2c3e50;
+            border-radius: 15px;
+            width: 160px;
+            text-align: center;
+            background: #f0f3f8;
+        }
+
+        /* Faixas pretas */
+        .faixa-preta {
+            background-color: #1c1c1c;
+            color: white;
+            padding: 2px 8px;
+            font-weight: 600;
+            font-size: 12px;
+            width: 100%;
+            border-radius: 2px;
+            margin: 3px 0 2px 0;
+            text-transform: uppercase;
+            border-left: 4px solid #ffae00;
+        }
+
+        /* Selector de clientes */
+        .selector-cliente {
+            margin: 2px 0 2px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #eef2f6;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        
+        .selector-cliente label {
+            font-weight: 600;
+            font-size: 12px;
+            min-width: 50px;
+        }
+        
+        .selector-cliente select {
+            flex: 1;
+            padding: 3px 6px;
+            border: 1px solid #999;
+            border-radius: 15px;
+            font-size: 12px;
+            background: white;
+        }
+
+        /* Bloco cliente */
+        .cliente-block {
+            background: #f4f7fc;
+            padding: 4px 8px;
+            border-left: 4px solid #1c1c1c;
+            margin-bottom: 2px;
+            font-size: 12px;
+            line-height: 1.3;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* Data e hora */
+        .data-hora-linha {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+            background: #eef2f6;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin: 2px 0 3px 0;
+        }
+        
+        .campo-data {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .campo-data span {
+            font-size: 12px;
+        }
+        
+        .campo-data input[type="date"] {
+            padding: 2px 4px;
+            border: 1px solid #aaa;
+            border-radius: 3px;
+            font-size: 12px;
+            width: 130px;
+        }
+        
+        .hora-range {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .hora-range span {
+            font-size: 12px;
+        }
+        
+        .hora-range input[type="time"] {
+            padding: 2px;
+            border: 1px solid #aaa;
+            border-radius: 3px;
+            font-size: 12px;
+            width: 70px;
+        }
+
+        /* ===== DESCRIÇÃO SERVIÇOS - 7 LINHAS ===== */
+        .desc-servicos textarea {
+            width: 100%;
+            height: 140px; /* 7 linhas * 20px = 140px */
+            font-size: 12px;
+            line-height: 1.5;
+            padding: 8px;
+            border: 1px solid #b0c4de;
+            border-radius: 4px;
+            resize: none;
+            overflow: auto;
+            font-family: 'Courier New', monospace;
+            background: #fefefe;
+        }
+
+        /* ===== IMAGENS - ALTURA FIXA 130px ===== */
+        .imagens-container {
+            margin: 2px 0 2px 0;
+        }
+        
+        .imagens-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 2px;
+        }
+        
+        .img-card {
+            width: 100%;
+            aspect-ratio: 240/130;
+            background: #e1e1e1;
+            border: 1px solid #2c3e50;
+            border-radius: 6px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #d3d3d3;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .img-card::before {
+            content: "📷";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .img-card:hover::before {
+            opacity: 1;
+        }
+        
+        .img-card[data-has-image="true"]::before {
+            content: "📸 Trocar";
+            font-size: 12px;
+        }
+        
+        .img-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.58);
+            color: white;
+            text-align: center;
+            padding: 2px 0;
+            font-size: 12px;
+            border-radius: 0 0 6px 6px;
+            cursor: text;
+            backdrop-filter: blur(2px);
+            z-index: 10;
+            pointer-events: auto;
+        }
+        
+        .img-label:empty:before {
+            content: "Digite uma descrição";
+            color: #ddd;
+            font-style: italic;
+            font-size: 12px;
+        }
+
+        /* Botão pop-up */
+        .btn-adicionar-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #2c3e50;
+            color: white;
+            border: 2px solid #ffae00;
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        
+        .btn-adicionar-popup.disabled {
+            background: #95a5a6;
+            border-color: #7f8c8d;
+            cursor: not-allowed;
+        }
+
+        /* Pagamento - FONTE 12 */
+        .meio-pagamento {
+            background: #f2f2f2;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-weight: 500;
+            margin: 2px 0 3px 0;
+            display: inline-block;
+            font-size: 12px;
+        }
+        
+        .pagamento-label {
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 1px;
+        }
+
+        /* Checkboxes - FONTE 12 */
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 12px;
+        }
+        
+        .check-item input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+        }
+
+        .diretrizes-linha {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px 15px;
+            background: #f9f9f9;
+            padding: 3px 0;
+            margin: 2px 0;
+        }
+        
+        .diretrizes-linha span {
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .modalidade-linha {
+            margin: 2px 0 3px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 15px;
+            background: #f0f4fa;
+            padding: 4px 8px;
+            border-radius: 5px;
+        }
+        
+        .modalidade-titulo {
+            font-weight: 700;
+            margin-bottom: 1px;
+            font-size: 12px;
+        }
+
+        /* ===== ASSINATURAS - FONTES MENORES ===== */
+        .assinaturas-container {
+            background: #c1daf5;
+            padding: 5px;
+            border-radius: 6px;
+            margin-top: 3px;
+        }
+        
+        .assinaturas-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .assin-box {
+            flex: 1 1 180px;
+        }
+        
+        .assin-label {
+            font-weight: 700;
+            font-size: 11px;
+            margin-bottom: 1px;
+        }
+        
+        .linha-assinatura {
+            border-bottom: 1px solid #0f2a3f;
+            width: 100%;
+            min-height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1px;
+            background-color: white;
+            border-radius: 2px 2px 0 0;
+        }
+        
+        .assin-tecnico {
+            background-image: url('assinatura.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+        
+        .nome-assin {
+            font-size: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .funcoes-aceite {
+            font-size: 8px;
+            color: #2c3e50;
+            margin-top: 1px;
+            text-align: center;
+            font-style: italic;
+            line-height: 1.1;
+        }
+
+        hr {
+            border: 0.5px solid #ccc;
+            margin: 3px 0 1px 0;
+        }
+        
+        .info-adicional {
+            font-size: 9px;
+            color: #555;
+            text-align: right;
+        }
+
+        /* Contador */
+        .contador-imagens {
+            font-size: 12px;
+            color: #ffae00;
+            font-weight: normal;
+            margin-left: 5px;
+        }
+
+        /* Input oculto */
+        .file-input-hidden {
+            display: none;
+        }
+
+        .pagamento-wrapper {
+            margin-left: 3px;
+            margin-bottom: 2px;
+        }
     </style>
+    
+    <script src="clientes.js"></script>
 </head>
 <body>
-    
-    <header>
-        <h1>Cinderela (Versão:1997)</h1>
-    </header>
-    <iframe src="https://drive.google.com/file/d/1UIjezrmk_h133hUa5ZM7J8syodGDuIz2/preview"></iframe>
+<div class="os-a4" id="osContainer">
+    <!-- Cabeçalho -->
+    <div class="header-top">
+        <div class="logo-area">
+            <img src="logo.png" alt="Logo TI" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2270%22 height=%2270%22 viewBox=%220 0 70 70%22><rect width=%2270%22 height=%2270%22 fill=%22%23f0f0f0%22/><text x=%2235%22 y=%2235%22 font-size=%2210%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 fill=%22%23333%22>LOGO</text><text x=%2235%22 y=%2248%22 font-size=%228%22 text-anchor=%22middle%22 fill=%22%23666%22>TI</text></svg>'; this.style.display='block';">
+        </div>
+        <div class="empresa-info">
+            <div class="nome-fantasia">S T.I Hardware e Programação</div>
+            <div>CNPJ: 51.529.892/0001-53 Técnico: ADRIANO J. SILVA</div>
+            <div>Rua Francisco Camargo Ribeiro,210 PQ Mira Flores</div>
+            <div>Itapevi/SP CEP: 06683-440 Tel: (11) 4144-5329 / 98888-5579</div>
+            <div>E-mail: adriano.joaquim@hotmail.com</div>
+        </div>
+    </div>
 
+    <!-- Número da OS -->
+    <div class="os-number-row">
+        <label for="osNumero">OS.nº:</label>
+        <input type="text" id="osNumero" value="0247-02/2026">
+    </div>
+
+    <!-- Selector de clientes -->
+    <div class="selector-cliente no-print">
+        <label>Cliente:</label>
+        <select id="clienteSelect">
+            <option value="">🔍 Carregando clientes...</option>
+        </select>
+    </div>
+
+    <!-- Cliente Atendido -->
+    <div class="faixa-preta">Cliente Atendido:</div>
+    <div class="cliente-block" id="clienteDados">
+        <span style="color:#777; font-style:italic;">Selecione um cliente...</span>
+    </div>
+
+    <!-- Informações básicas -->
+    <div class="faixa-preta">Informações básicas</div>
+    <div class="data-hora-linha">
+        <div class="campo-data">
+            <span>Data da visita:</span>
+            <input type="date" id="dataVisita" value="2026-02-15">
+        </div>
+        <div class="hora-range">
+            <span>das</span>
+            <input type="time" id="horaInicio" value="00:35">
+            <span>às</span>
+            <input type="time" id="horaFim" value="01:38">
+        </div>
+    </div>
+
+    <!-- DESCRIÇÃO DOS SERVIÇOS - 7 LINHAS -->
+    <div class="faixa-preta">Descrição dos Serviços:</div>
+    <div class="desc-servicos">
+        <textarea id="descTextarea" placeholder="• Descreva os serviços executados... (7 linhas disponíveis)"></textarea>
+    </div>
+
+    <!-- IMAGENS - ALTURA FIXA 130px -->
+    <div class="faixa-preta">
+        <span>Imagens <span class="contador-imagens" id="contadorImagens">(3/6)</span></span>
+    </div>
+    
+    <!-- Grid de imagens -->
+    <div class="imagens-container">
+        <div class="imagens-grid" id="imagensGrid"></div>
+    </div>
+
+    <!-- Pagamento -->
+    <div class="faixa-preta">Pagamento</div>
+    <div class="pagamento-wrapper">
+        <div class="pagamento-label">Meios de Pagamento</div>
+        <div class="meio-pagamento">Transferência Bancária</div>
+    </div>
+
+    <!-- Diretrizes -->
+    <div class="diretrizes-linha">
+        <span>Diretrizes do Atendimento:</span>
+        <div class="check-item"><input type="checkbox"> Presencial</div>
+        <div class="check-item"><input type="checkbox"> Remoto</div>
+        <div class="check-item"><input type="checkbox"> Help-Desk</div>
+    </div>
+
+    <!-- Modalidade -->
+    <div>
+        <div class="modalidade-titulo">Assinale o Tipo de Modalidade de Serviço:</div>
+        <div class="modalidade-linha">
+            <div class="check-item"><input type="checkbox"> Emergencial</div>
+            <div class="check-item"><input type="checkbox"> Corretiva</div>
+            <div class="check-item"><input type="checkbox"> Preventiva</div>
+            <div class="check-item"><input type="checkbox"> Instalação</div>
+            <div class="check-item"><input type="checkbox"> Programação</div>
+        </div>
+    </div>
+
+    <!-- Assinaturas -->
+    <div class="assinaturas-container">
+        <div class="assinaturas-row">
+            <div class="assin-box">
+                <div class="assin-label">Visto do Técnico:</div>
+                <div class="linha-assinatura assin-tecnico"></div>
+                <div class="nome-assin">ADRIANO J. SILVA</div>
+            </div>
+            <div class="assin-box">
+                <div class="assin-label">Visto do Receptor (a):</div>
+                <div class="linha-assinatura" style="background: white;"></div>
+                <div class="funcoes-aceite">Gerente / Aux.Administrativa / Líder da Segurança / Recepcionista</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <hr>
+    <div class="info-adicional">Sistema de OS • 7 linhas • Altura imagens 130px • Fonte 12</div>
+</div>
+
+<!-- BOTÃO POP-UP + -->
+<div class="btn-adicionar-popup no-print" id="btnAdicionarPopup" title="Adicionar imagem (máx. 6)">+</div>
+
+<!-- Script simplificado -->
+<script>
+    const MAX_IMAGENS = 6;
+    let contadorImagens = 0;
+    let proximoId = 1;
+    
+    function inicializarOS() {
+        if (typeof window.carregarClientes === 'function') {
+            window.carregarClientes();
+        }
+        
+        const select = document.getElementById('clienteSelect');
+        if (select) {
+            select.addEventListener('change', function(e) {
+                if (typeof window.mostrarDadosCliente === 'function') {
+                    window.mostrarDadosCliente(e.target.value);
+                }
+            });
+        }
+        
+        inicializarImagensPadrao();
+        configurarBotaoPopup();
+    }
+    
+    function inicializarImagensPadrao() {
+        const grid = document.getElementById('imagensGrid');
+        grid.innerHTML = '';
+        
+        for (let i = 0; i < 3; i++) {
+            adicionarCardImagem();
+        }
+        
+        contadorImagens = 3;
+        atualizarContador();
+        atualizarBotaoPopup();
+    }
+    
+    function adicionarCardImagem() {
+        const grid = document.getElementById('imagensGrid');
+        const cardId = `imgCard_${proximoId}`;
+        const fileInputId = `fileInput_${proximoId}`;
+        
+        const card = document.createElement('div');
+        card.className = 'img-card';
+        card.id = cardId;
+        card.setAttribute('data-has-image', 'false');
+        
+        const label = document.createElement('div');
+        label.className = 'img-label';
+        label.setAttribute('contenteditable', 'true');
+        label.innerText = 'Digite uma descrição';
+        
+        card.appendChild(label);
+        grid.appendChild(card);
+        
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.id = fileInputId;
+        fileInput.className = 'file-input-hidden';
+        fileInput.accept = 'image/*';
+        document.body.appendChild(fileInput);
+        
+        card.addEventListener('click', function(event) {
+            if (event.target.classList.contains('img-label')) return;
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file || !file.type.startsWith('image/')) {
+                alert('Selecione uma imagem válida.');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                card.style.backgroundImage = `url('${e.target.result}')`;
+                card.setAttribute('data-has-image', 'true');
+                fileInput.value = '';
+            };
+            reader.readAsDataURL(file);
+        });
+        
+        label.addEventListener('focus', function() {
+            if (this.innerText === 'Digite uma descrição') this.innerText = '';
+        });
+        
+        label.addEventListener('blur', function() {
+            if (this.innerText.trim() === '') this.innerText = 'Digite uma descrição';
+        });
+        
+        proximoId++;
+    }
+    
+    function configurarBotaoPopup() {
+        const btn = document.getElementById('btnAdicionarPopup');
+        
+        btn.addEventListener('click', function() {
+            if (contadorImagens >= MAX_IMAGENS) {
+                alert(`Máximo de ${MAX_IMAGENS} imagens atingido!`);
+                return;
+            }
+            
+            adicionarCardImagem();
+            contadorImagens++;
+            
+            atualizarContador();
+            atualizarBotaoPopup();
+        });
+    }
+    
+    function atualizarContador() {
+        document.getElementById('contadorImagens').innerText = `(${contadorImagens}/${MAX_IMAGENS})`;
+    }
+    
+    function atualizarBotaoPopup() {
+        const btn = document.getElementById('btnAdicionarPopup');
+        if (contadorImagens >= MAX_IMAGENS) {
+            btn.classList.add('disabled');
+        } else {
+            btn.classList.remove('disabled');
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', inicializarOS);
+    } else {
+        inicializarOS();
+    }
+</script>
 </body>
 </html>
