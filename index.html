@@ -3,739 +3,530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ordem de Serviço · T.I (7 linhas)</title>
+    <title>Sistema de Controle de Acesso - Login</title>
     <style>
-        * {
+        /* [Manter todos os estilos originais...] */
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-        }
-
-        body {
-            background: #e6e9ef;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            background-image: url('file:///C:/SISTEMA%20DE%20CONTROLE%20DE%20ACESSO/anima/tecnologia.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
             min-height: 100vh;
-            padding: 5px;
         }
-
-        /* folha A4 */
-        .os-a4 {
-            max-width: 900px;
-            width: 100%;
-            background: white;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-            padding: 8px 15px 5px 15px;
-            border-radius: 4px;
-            page-break-after: avoid;
-            page-break-inside: avoid;
+        .header-container {
+            width: 47cm;
+            margin: 0 auto;
+            position: sticky;
+            top: 0;
+            z-index: 3;
+            overflow: hidden;
+        }
+        .header-image {
+            width: 47cm;
+            height: 1cm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url('file:///C:/SISTEMA%20DE%20CONTROLE%20DE%20ACESSO/Temas/barrapreta.jpg');
+            background-size: 47cm 1cm;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            margin: 0 auto;
+            position: relative;
+        }
+        .moving-text {
+            position: absolute;
+            white-space: nowrap;
+            left: 100%;
+            animation: moveText 60s linear infinite;
+            opacity: 0;
+        }
+        .moving-text:nth-child(1) {
+            animation-delay: 0s;
+        }
+        .moving-text:nth-child(2) {
+            animation-delay: 15s;
+        }
+        .moving-text:nth-child(3) {
+            animation-delay: 30s;
+        }
+        .moving-text:nth-child(4) {
+            animation-delay: 45s;
+        }
+        @keyframes moveText {
+            0% {
+                left: 100%;
+                opacity: 0;
+            }
+            1% {
+                opacity: 1;
+            }
+            24% {
+                opacity: 1;
+            }
+            25% {
+                left: 0;
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            100% {
+                left: 0;
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+        }
+        .banner-container {
+            width: 47cm;
+            margin: 0 auto;
+            position: sticky;
+            top: 1cm;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+        }
+        .banner {
+            width: 47cm;
+            height: 2cm;
+            object-fit: fill;
+            margin: 0 auto;
+        }
+        .left-side-content {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            left: 5mm;
+            z-index: 4;
+        }
+        .sti-logo {
+            width: 57px;
+            height: 57px;
+            margin-right: 0;
+        }
+        .client-text {
+            width: 223px;
+            height: 57px;
+            margin-right: 5px;
             display: flex;
             flex-direction: column;
-        }
-
-        @media print {
-            body { background: none; padding: 0; margin: 0; }
-            .os-a4 { 
-                box-shadow: none; 
-                padding: 0.1cm 0.2cm; 
-                max-width: 100%; 
-                margin: 0;
-            }
-            .no-print, .btn-adicionar-popup { display: none !important; }
-        }
-
-        /* ===== TODOS OS TEXTOS COM FONTE 12, EXCETO ASSINATURAS ===== */
-        
-        /* Cabeçalho */
-        .header-top {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 2px;
-        }
-        
-        .logo-area {
-            flex-shrink: 0;
-            width: 70px;
-            height: 70px;
-            border: 1px solid #ccc;
-            background: #f8f8f8;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            overflow: hidden;
-        }
-        
-        .logo-area img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        
-        .empresa-info {
-            flex: 1;
-            font-size: 12px;
-            line-height: 1.3;
-            color: #1e1e1e;
-            font-weight: 400;
-            border-left: 1px solid #cfcfcf;
-            padding-left: 8px;
-        }
-        
-        .empresa-info .nome-fantasia {
-            font-weight: 700;
-            font-size: 12px;
-            color: #0b2b4a;
-        }
-
-        /* Número da OS */
-        .os-number-row {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin: 2px 0 3px 0;
-            gap: 5px;
-        }
-        
-        .os-number-row label {
-            font-weight: 600;
-            font-size: 12px;
-            color: #0b2b4a;
-        }
-        
-        .os-number-row input {
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 2px 8px;
-            border: 1px solid #2c3e50;
-            border-radius: 15px;
-            width: 160px;
-            text-align: center;
-            background: #f0f3f8;
-        }
-
-        /* Faixas pretas */
-        .faixa-preta {
-            background-color: #1c1c1c;
             color: white;
-            padding: 2px 8px;
-            font-weight: 600;
-            font-size: 12px;
-            width: 100%;
-            border-radius: 2px;
-            margin: 3px 0 2px 0;
-            text-transform: uppercase;
-            border-left: 4px solid #ffae00;
-        }
-
-        /* Selector de clientes */
-        .selector-cliente {
-            margin: 2px 0 2px 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #eef2f6;
-            padding: 3px 8px;
-            border-radius: 4px;
-        }
-        
-        .selector-cliente label {
-            font-weight: 600;
-            font-size: 12px;
-            min-width: 50px;
-        }
-        
-        .selector-cliente select {
-            flex: 1;
-            padding: 3px 6px;
-            border: 1px solid #999;
-            border-radius: 15px;
-            font-size: 12px;
-            background: white;
-        }
-
-        /* Bloco cliente */
-        .cliente-block {
-            background: #f4f7fc;
-            padding: 4px 8px;
-            border-left: 4px solid #1c1c1c;
-            margin-bottom: 2px;
-            font-size: 12px;
-            line-height: 1.3;
-            border-radius: 0 4px 4px 0;
-        }
-
-        /* Data e hora */
-        .data-hora-linha {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px 12px;
-            background: #eef2f6;
-            padding: 4px 8px;
-            border-radius: 4px;
-            margin: 2px 0 3px 0;
-        }
-        
-        .campo-data {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .campo-data span {
-            font-size: 12px;
-        }
-        
-        .campo-data input[type="date"] {
-            padding: 2px 4px;
-            border: 1px solid #aaa;
-            border-radius: 3px;
-            font-size: 12px;
-            width: 130px;
-        }
-        
-        .hora-range {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .hora-range span {
-            font-size: 12px;
-        }
-        
-        .hora-range input[type="time"] {
-            padding: 2px;
-            border: 1px solid #aaa;
-            border-radius: 3px;
-            font-size: 12px;
-            width: 70px;
-        }
-
-        /* ===== DESCRIÇÃO SERVIÇOS - 7 LINHAS ===== */
-        .desc-servicos textarea {
-            width: 100%;
-            height: 140px; /* 7 linhas * 20px = 140px */
-            font-size: 12px;
-            line-height: 1.5;
-            padding: 8px;
-            border: 1px solid #b0c4de;
-            border-radius: 4px;
-            resize: none;
-            overflow: auto;
-            font-family: 'Courier New', monospace;
-            background: #fefefe;
-        }
-
-        /* ===== IMAGENS - ALTURA FIXA 130px ===== */
-        .imagens-container {
-            margin: 2px 0 2px 0;
-        }
-        
-        .imagens-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 2px;
-        }
-        
-        .img-card {
-            width: 100%;
-            aspect-ratio: 240/130;
-            background: #e1e1e1;
-            border: 1px solid #2c3e50;
-            border-radius: 6px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-color: #d3d3d3;
-            cursor: pointer;
-            overflow: hidden;
-        }
-        
-        .img-card::before {
-            content: "📷";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 15px;
-            font-size: 12px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            pointer-events: none;
-            z-index: 5;
-        }
-        
-        .img-card:hover::before {
-            opacity: 1;
-        }
-        
-        .img-card[data-has-image="true"]::before {
-            content: "📸 Trocar";
-            font-size: 12px;
-        }
-        
-        .img-label {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.58);
-            color: white;
-            text-align: center;
-            padding: 2px 0;
-            font-size: 12px;
-            border-radius: 0 0 6px 6px;
-            cursor: text;
-            backdrop-filter: blur(2px);
-            z-index: 10;
-            pointer-events: auto;
-        }
-        
-        .img-label:empty:before {
-            content: "Digite uma descrição";
-            color: #ddd;
-            font-style: italic;
-            font-size: 12px;
-        }
-
-        /* Botão pop-up */
-        .btn-adicionar-popup {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #2c3e50;
-            color: white;
-            border: 2px solid #ffae00;
-            font-size: 28px;
             font-weight: bold;
+            text-align: center;
+            line-height: 1.1;
+            font-size: 12px;
+        }
+        .client-text div {
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .client-text div:first-child {
+            font-size: 12px;
+            margin-bottom: 2px;
+        }
+        .client-text div:nth-child(2) {
+            font-size: 11px;
+            letter-spacing: -0.2px;
+            margin-bottom: 2px;
+        }
+        .client-text div:last-child {
+            font-size: 10px;
+            letter-spacing: -0.1px;
+        }
+        .portaria-rect {
+            width: 130px;
+            height: 28px;
+            margin-right: 5px;
+            background-color: white;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: bold;
+            color: black;
+            animation: piscar 1s infinite;
+        }
+        @keyframes piscar {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        .config-button {
+            width: 100px;
+            height: 28px;
+            background-color: rgba(255, 255, 255, 0.4);
+            color: black;
+            border: none;
+            padding: 0;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            margin-right: 2px;
+        }
+        .config-button:hover {
+            background-color: white;
+            color: black;
+        }
+        .botao-aceso {
+            background-color: white !important;
+            color: black !important;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+        
+        /* [Manter os estilos do popup de login...] */
+        .login-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             z-index: 1000;
         }
-        
-        .btn-adicionar-popup.disabled {
-            background: #95a5a6;
-            border-color: #7f8c8d;
-            cursor: not-allowed;
-        }
-
-        /* Pagamento - FONTE 12 */
-        .meio-pagamento {
-            background: #f2f2f2;
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-weight: 500;
-            margin: 2px 0 3px 0;
-            display: inline-block;
-            font-size: 12px;
-        }
-        
-        .pagamento-label {
-            font-weight: 600;
-            font-size: 12px;
-            margin-bottom: 1px;
-        }
-
-        /* Checkboxes - FONTE 12 */
-        .check-item {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            font-size: 12px;
-        }
-        
-        .check-item input[type="checkbox"] {
-            width: 14px;
-            height: 14px;
-        }
-
-        .diretrizes-linha {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px 15px;
-            background: #f9f9f9;
-            padding: 3px 0;
-            margin: 2px 0;
-        }
-        
-        .diretrizes-linha span {
-            font-weight: 700;
-            font-size: 12px;
-        }
-
-        .modalidade-linha {
-            margin: 2px 0 3px 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px 15px;
-            background: #f0f4fa;
-            padding: 4px 8px;
-            border-radius: 5px;
-        }
-        
-        .modalidade-titulo {
-            font-weight: 700;
-            margin-bottom: 1px;
-            font-size: 12px;
-        }
-
-        /* ===== ASSINATURAS - FONTES MENORES ===== */
-        .assinaturas-container {
-            background: #c1daf5;
-            padding: 5px;
-            border-radius: 6px;
-            margin-top: 3px;
-        }
-        
-        .assinaturas-row {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        
-        .assin-box {
-            flex: 1 1 180px;
-        }
-        
-        .assin-label {
-            font-weight: 700;
-            font-size: 11px;
-            margin-bottom: 1px;
-        }
-        
-        .linha-assinatura {
-            border-bottom: 1px solid #0f2a3f;
-            width: 100%;
-            min-height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1px;
-            background-color: white;
-            border-radius: 2px 2px 0 0;
-        }
-        
-        .assin-tecnico {
-            background-image: url('assinatura.png');
-            background-repeat: no-repeat;
+        .login-popup {
+            width: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            background: url('file:///C:/SISTEMA%20DE%20CONTROLE%20DE%20ACESSO/anima/efeito.gif');
+            background-size: cover;
             background-position: center;
-            background-size: contain;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
-        
-        .nome-assin {
-            font-size: 10px;
+        .login-header {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: yellow;
+            padding: 15px;
             text-align: center;
-            font-weight: 600;
+            font-weight: bold;
+            font-size: 18px;
+            text-transform: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
-        
-        .funcoes-aceite {
-            font-size: 8px;
-            color: #2c3e50;
-            margin-top: 1px;
+        .login-body {
+            padding: 25px;
+            color: white;
+            position: relative;
+        }
+        .login-form-group {
+            margin-bottom: 20px;
+        }
+        .login-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            text-transform: none;
+            font-size: 14px;
+        }
+        .login-form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 14px;
+            text-transform: none;
+            transition: all 0.3s ease;
+        }
+        .login-form-group input:focus {
+            border-color: #1F45FC;
+            outline: none;
+            box-shadow: 0 0 8px rgba(31, 69, 252, 0.6);
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        .login-footer {
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .login-button {
+            padding: 10px 25px;
+            background-color: #1F45FC;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: none;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+        .login-button:hover {
+            background-color: #0D35D4;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .error-message {
+            color: #ff4444;
             text-align: center;
-            font-style: italic;
-            line-height: 1.1;
-        }
-
-        hr {
-            border: 0.5px solid #ccc;
-            margin: 3px 0 1px 0;
-        }
-        
-        .info-adicional {
-            font-size: 9px;
-            color: #555;
-            text-align: right;
-        }
-
-        /* Contador */
-        .contador-imagens {
-            font-size: 12px;
-            color: #ffae00;
-            font-weight: normal;
-            margin-left: 5px;
-        }
-
-        /* Input oculto */
-        .file-input-hidden {
-            display: none;
-        }
-
-        .pagamento-wrapper {
-            margin-left: 3px;
-            margin-bottom: 2px;
+            margin-top: 15px;
+            font-weight: bold;
+            min-height: 20px;
+            text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.9);
+            text-transform: none;
+            font-size: 13px;
         }
     </style>
-    
-    <script src="clientes.js"></script>
 </head>
-<body>
-<div class="os-a4" id="osContainer">
-    <!-- Cabeçalho -->
-    <div class="header-top">
-        <div class="logo-area">
-            <img src="logo.png" alt="Logo TI" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2270%22 height=%2270%22 viewBox=%220 0 70 70%22><rect width=%2270%22 height=%2270%22 fill=%22%23f0f0f0%22/><text x=%2235%22 y=%2235%22 font-size=%2210%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 fill=%22%23333%22>LOGO</text><text x=%2235%22 y=%2248%22 font-size=%228%22 text-anchor=%22middle%22 fill=%22%23666%22>TI</text></svg>'; this.style.display='block';">
-        </div>
-        <div class="empresa-info">
-            <div class="nome-fantasia">S T.I Hardware e Programação</div>
-            <div>CNPJ: 51.529.892/0001-53 Técnico: ADRIANO J. SILVA</div>
-            <div>Rua Francisco Camargo Ribeiro,210 PQ Mira Flores</div>
-            <div>Itapevi/SP CEP: 06683-440 Tel: (11) 4144-5329 / 98888-5579</div>
-            <div>E-mail: adriano.joaquim@hotmail.com</div>
-        </div>
-    </div>
 
-    <!-- Número da OS -->
-    <div class="os-number-row">
-        <label for="osNumero">OS.nº:</label>
-        <input type="text" id="osNumero" value="0247-02/2026">
-    </div>
-
-    <!-- Selector de clientes -->
-    <div class="selector-cliente no-print">
-        <label>Cliente:</label>
-        <select id="clienteSelect">
-            <option value="">🔍 Carregando clientes...</option>
-        </select>
-    </div>
-
-    <!-- Cliente Atendido -->
-    <div class="faixa-preta">Cliente Atendido:</div>
-    <div class="cliente-block" id="clienteDados">
-        <span style="color:#777; font-style:italic;">Selecione um cliente...</span>
-    </div>
-
-    <!-- Informações básicas -->
-    <div class="faixa-preta">Informações básicas</div>
-    <div class="data-hora-linha">
-        <div class="campo-data">
-            <span>Data da visita:</span>
-            <input type="date" id="dataVisita" value="2026-02-15">
-        </div>
-        <div class="hora-range">
-            <span>das</span>
-            <input type="time" id="horaInicio" value="00:35">
-            <span>às</span>
-            <input type="time" id="horaFim" value="01:38">
-        </div>
-    </div>
-
-    <!-- DESCRIÇÃO DOS SERVIÇOS - 7 LINHAS -->
-    <div class="faixa-preta">Descrição dos Serviços:</div>
-    <div class="desc-servicos">
-        <textarea id="descTextarea" placeholder="• Descreva os serviços executados... (7 linhas disponíveis)"></textarea>
-    </div>
-
-    <!-- IMAGENS - ALTURA FIXA 130px -->
-    <div class="faixa-preta">
-        <span>Imagens <span class="contador-imagens" id="contadorImagens">(3/6)</span></span>
-    </div>
-    
-    <!-- Grid de imagens -->
-    <div class="imagens-container">
-        <div class="imagens-grid" id="imagensGrid"></div>
-    </div>
-
-    <!-- Pagamento -->
-    <div class="faixa-preta">Pagamento</div>
-    <div class="pagamento-wrapper">
-        <div class="pagamento-label">Meios de Pagamento</div>
-        <div class="meio-pagamento">Transferência Bancária</div>
-    </div>
-
-    <!-- Diretrizes -->
-    <div class="diretrizes-linha">
-        <span>Diretrizes do Atendimento:</span>
-        <div class="check-item"><input type="checkbox"> Presencial</div>
-        <div class="check-item"><input type="checkbox"> Remoto</div>
-        <div class="check-item"><input type="checkbox"> Help-Desk</div>
-    </div>
-
-    <!-- Modalidade -->
-    <div>
-        <div class="modalidade-titulo">Assinale o Tipo de Modalidade de Serviço:</div>
-        <div class="modalidade-linha">
-            <div class="check-item"><input type="checkbox"> Emergencial</div>
-            <div class="check-item"><input type="checkbox"> Corretiva</div>
-            <div class="check-item"><input type="checkbox"> Preventiva</div>
-            <div class="check-item"><input type="checkbox"> Instalação</div>
-            <div class="check-item"><input type="checkbox"> Programação</div>
-        </div>
-    </div>
-
-    <!-- Assinaturas -->
-    <div class="assinaturas-container">
-        <div class="assinaturas-row">
-            <div class="assin-box">
-                <div class="assin-label">Visto do Técnico:</div>
-                <div class="linha-assinatura assin-tecnico"></div>
-                <div class="nome-assin">ADRIANO J. SILVA</div>
-            </div>
-            <div class="assin-box">
-                <div class="assin-label">Visto do Receptor (a):</div>
-                <div class="linha-assinatura" style="background: white;"></div>
-                <div class="funcoes-aceite">Gerente / Aux.Administrativa / Líder da Segurança / Recepcionista</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Rodapé -->
-    <hr>
-    <div class="info-adicional">Sistema de OS • 7 linhas • Altura imagens 130px • Fonte 12</div>
-</div>
-
-<!-- BOTÃO POP-UP + -->
-<div class="btn-adicionar-popup no-print" id="btnAdicionarPopup" title="Adicionar imagem (máx. 6)">+</div>
-
-<!-- Script simplificado -->
 <script>
-    const MAX_IMAGENS = 6;
-    let contadorImagens = 0;
-    let proximoId = 1;
-    
-    function inicializarOS() {
-        if (typeof window.carregarClientes === 'function') {
-            window.carregarClientes();
+// Esconde o caminho do arquivo e define o título
+function hideFilePath() {
+    try {
+        // Para navegadores modernos
+        history.replaceState({}, "Controle de Acesso/Login", "#");
+        document.title = "Controle de Acesso/Login";
+        
+        // Para IE e navegadores antigos
+        if (!history.replaceState) {
+            window.location.hash = "#";
         }
-        
-        const select = document.getElementById('clienteSelect');
-        if (select) {
-            select.addEventListener('change', function(e) {
-                if (typeof window.mostrarDadosCliente === 'function') {
-                    window.mostrarDadosCliente(e.target.value);
-                }
-            });
-        }
-        
-        inicializarImagensPadrao();
-        configurarBotaoPopup();
+    } catch(e) {
+        console.log("Não foi possível alterar a URL: ", e);
     }
-    
-    function inicializarImagensPadrao() {
-        const grid = document.getElementById('imagensGrid');
-        grid.innerHTML = '';
-        
-        for (let i = 0; i < 3; i++) {
-            adicionarCardImagem();
-        }
-        
-        contadorImagens = 3;
-        atualizarContador();
-        atualizarBotaoPopup();
-    }
-    
-    function adicionarCardImagem() {
-        const grid = document.getElementById('imagensGrid');
-        const cardId = `imgCard_${proximoId}`;
-        const fileInputId = `fileInput_${proximoId}`;
-        
-        const card = document.createElement('div');
-        card.className = 'img-card';
-        card.id = cardId;
-        card.setAttribute('data-has-image', 'false');
-        
-        const label = document.createElement('div');
-        label.className = 'img-label';
-        label.setAttribute('contenteditable', 'true');
-        label.innerText = 'Digite uma descrição';
-        
-        card.appendChild(label);
-        grid.appendChild(card);
-        
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.id = fileInputId;
-        fileInput.className = 'file-input-hidden';
-        fileInput.accept = 'image/*';
-        document.body.appendChild(fileInput);
-        
-        card.addEventListener('click', function(event) {
-            if (event.target.classList.contains('img-label')) return;
-            fileInput.click();
-        });
-        
-        fileInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (!file || !file.type.startsWith('image/')) {
-                alert('Selecione uma imagem válida.');
-                return;
-            }
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                card.style.backgroundImage = `url('${e.target.result}')`;
-                card.setAttribute('data-has-image', 'true');
-                fileInput.value = '';
-            };
-            reader.readAsDataURL(file);
-        });
-        
-        label.addEventListener('focus', function() {
-            if (this.innerText === 'Digite uma descrição') this.innerText = '';
-        });
-        
-        label.addEventListener('blur', function() {
-            if (this.innerText.trim() === '') this.innerText = 'Digite uma descrição';
-        });
-        
-        proximoId++;
-    }
-    
-    function configurarBotaoPopup() {
-        const btn = document.getElementById('btnAdicionarPopup');
-        
-        btn.addEventListener('click', function() {
-            if (contadorImagens >= MAX_IMAGENS) {
-                alert(`Máximo de ${MAX_IMAGENS} imagens atingido!`);
-                return;
-            }
-            
-            adicionarCardImagem();
-            contadorImagens++;
-            
-            atualizarContador();
-            atualizarBotaoPopup();
-        });
-    }
-    
-    function atualizarContador() {
-        document.getElementById('contadorImagens').innerText = `(${contadorImagens}/${MAX_IMAGENS})`;
-    }
-    
-    function atualizarBotaoPopup() {
-        const btn = document.getElementById('btnAdicionarPopup');
-        if (contadorImagens >= MAX_IMAGENS) {
-            btn.classList.add('disabled');
-        } else {
-            btn.classList.remove('disabled');
-        }
-    }
+}
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', inicializarOS);
-    } else {
-        inicializarOS();
-    }
+// Executa quando a página carrega
+window.onload = function() {
+    hideFilePath();
+    
+    // Monitora mudanças de hash para manter a URL limpa
+    window.onhashchange = function() {
+        if(window.location.hash !== "#") {
+            hideFilePath();
+        }
+    };
+};
+
+// Impede que o usuário veja o caminho ao atualizar
+window.onbeforeunload = function() {
+    hideFilePath();
+};
 </script>
+
+<body>
+    <div class="header-container">
+        <div class="header-image" id="moving-text-container">
+            <!-- As mensagens serão carregadas dinamicamente via JavaScript -->
+        </div>
+    </div>
+    <div class="banner-container">
+        <div class="left-side-content">
+            <img src="file:///C:/SISTEMA%20DE%20CONTROLE%20DE%20ACESSO/Temas/STILogo.png" alt="STI Logo" class="sti-logo">
+            <div class="client-text">
+                <div>Suporte Tecnico Informatica</div>
+                <div>HARDWARE E PROGRAMAÇÃO</div>
+                <div>CNPJ: 51.529.892/0001-53</div>
+            </div>
+            <div class="portaria-rect">PORTARIA</div>
+            <button class="config-button" id="inicioButton">Inicio</button>
+            <button class="config-button" id="registroButton">Registro</button>
+            <button class="config-button" id="relatorioButton">Relatorio</button>
+            <button class="config-button" id="dashboardButton">Operador</button>
+            <button class="config-button" id="suporteButton">Suporte</button>
+            <button class="config-button" id="ajudaButton">Ajuda</button>
+            <button class="config-button" id="configButton">Configurar</button>
+        </div>
+        <img src="file:///C:/SISTEMA%20DE%20CONTROLE%20DE%20ACESSO/Temas/marcoazulescuro.jpg" alt="Banner" class="banner">
+    </div>
+
+    <!-- Popup de Login com GIF animado totalmente visível -->
+    <div class="login-popup-overlay">
+        <div class="login-popup">
+            <div class="login-header">
+                Entre com suas credênciais
+            </div>
+            <div class="login-body">
+                <div class="login-form-group">
+                    <label for="login">Login:</label>
+                    <input type="text" id="login" placeholder="Digite seu login">
+                </div>
+                <div class="login-form-group">
+                    <label for="senha">Senha:</label>
+                    <input type="password" id="senha" placeholder="Digite sua senha">
+                </div>
+                <div class="error-message" id="error-message"></div>
+            </div>
+            <div class="login-footer">
+                <button class="login-button" id="entrar-button">Entrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para carregar as mensagens de um arquivo de texto
+        function carregarMensagens() {
+            // Caminho para o arquivo de texto com as mensagens
+            const caminhoArquivo = 'mensagens.txt';
+            
+            // Faz uma requisição para carregar o arquivo
+            fetch(caminhoArquivo)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar o arquivo de mensagens');
+                    }
+                    return response.text();
+                })
+                .then(texto => {
+                    // Divide o texto em linhas e filtra linhas vazias
+                    const mensagens = texto.split('\n').filter(line => line.trim() !== '');
+                    
+                    // Seleciona o container das mensagens
+                    const container = document.getElementById('moving-text-container');
+                    
+                    // Limpa o container
+                    container.innerHTML = '';
+                    
+                    // Adiciona cada mensagem como um elemento de texto em movimento
+                    mensagens.forEach((mensagem, index) => {
+                        const elemento = document.createElement('div');
+                        elemento.className = 'moving-text';
+                        elemento.textContent = mensagem;
+                        
+                        // Define o atraso de animação com base no índice
+                        elemento.style.animationDelay = `${index * 15}s`;
+                        
+                        container.appendChild(elemento);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    // Mensagens padrão em caso de erro
+                    const mensagensPadrao = [
+                        "Sistema de Controle de Acesso ®",
+                        "ENTRE COM A LICENÇA PARA PODER UTILIZAR",
+                        "FAVOR LIGAR OU CHAMAR NO WHATSAPP: (11) 98888-5579",
+                        
+                    ];
+                    
+                    const container = document.getElementById('moving-text-container');
+                    container.innerHTML = '';
+                    
+                    mensagensPadrao.forEach((mensagem, index) => {
+                        const elemento = document.createElement('div');
+                        elemento.className = 'moving-text';
+                        elemento.textContent = mensagem;
+                        elemento.style.animationDelay = `${index * 15}s`;
+                        container.appendChild(elemento);
+                    });
+                });
+        }
+
+        // Dados de usuários válidos
+        const usuariosValidos = {
+            "admin": "admin",
+            "operador": "operador"
+        };
+
+        // Elementos do DOM
+        const loginInput = document.getElementById('login');
+        const senhaInput = document.getElementById('senha');
+        const entrarButton = document.getElementById('entrar-button');
+        const errorMessage = document.getElementById('error-message');
+
+        // Função para verificar credenciais
+        function verificarCredenciais() {
+            const login = loginInput.value;
+            const senha = senhaInput.value;
+
+            if (!login) {
+                errorMessage.textContent = 'Por favor, digite seu login';
+                return;
+            }
+
+            if (!senha) {
+                errorMessage.textContent = 'Por favor, digite sua senha';
+                return;
+            }
+
+            const usuarioEncontrado = Object.keys(usuariosValidos).find(
+                key => key.toLowerCase() === login.toLowerCase()
+            );
+            
+            if (usuarioEncontrado && usuariosValidos[usuarioEncontrado] === senha) {
+                const novaJanela = window.open('inicio.html', '_blank');
+                if (novaJanela) {
+                    novaJanela.focus();
+                }
+                window.close();
+            } else {
+                errorMessage.textContent = 'Credenciais inválidas. Verifique seu login e senha.';
+                senhaInput.value = '';
+                loginInput.focus();
+            }
+        }
+
+        // Evento de clique no botão Entrar
+        entrarButton.addEventListener('click', verificarCredenciais);
+
+        // Evento de pressionar Enter nos campos
+        loginInput.addEventListener('keypress', function(evento) {
+            if (evento.key === 'Enter') {
+                verificarCredenciais();
+            }
+        });
+
+        senhaInput.addEventListener('keypress', function(evento) {
+            if (evento.key === 'Enter') {
+                verificarCredenciais();
+            }
+        });
+
+        // Efeito de sequência de botões
+        const botoes = [
+            document.getElementById('inicioButton'),
+            document.getElementById('registroButton'),
+            document.getElementById('relatorioButton'),
+            document.getElementById('dashboardButton'),
+            document.getElementById('suporteButton'),
+            document.getElementById('ajudaButton'),
+            document.getElementById('configButton')
+        ];
+
+        let indiceAtual = 0;
+        const tempoAcendido = 1000; // 1 segundo aceso
+        const tempoApagado = 500;  // 0.5 segundos entre botões
+
+        function acenderProximoBotao() {
+            // Remove a classe 'aceso' de todos os botões
+            botoes.forEach(botao => botao.classList.remove('botao-aceso'));
+            
+            // Adiciona a classe 'aceso' ao botão atual
+            botoes[indiceAtual].classList.add('botao-aceso');
+            
+            // Avança para o próximo botão (ou volta ao primeiro)
+            indiceAtual = (indiceAtual + 1) % botoes.length;
+            
+            // Agenda o próximo passo
+            setTimeout(() => {
+                botoes[(indiceAtual - 1 + botoes.length) % botoes.length].classList.remove('botao-aceso');
+                setTimeout(acenderProximoBotao, tempoApagado);
+            }, tempoAcendido);
+        }
+
+        // Inicia o efeito quando a página carrega
+        window.addEventListener('load', function() {
+            loginInput.focus();
+            carregarMensagens(); // Carrega as mensagens do arquivo externo
+            setTimeout(acenderProximoBotao, 1000); // Começa após 1 segundo
+        });
+    </script>
 </body>
 </html>
